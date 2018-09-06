@@ -13,7 +13,7 @@ import tinkerer.paths
 project = 'Ken Burcham'
 
 # Change this to the tagline of your blog
-tagline = '20 Years of Engineering the Web'
+tagline = '20 Years Web Engineering'
 
 # Change this to the description of your blog
 description = ''
