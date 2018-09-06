@@ -67,21 +67,21 @@
         </div>
         <div class="section">
             <h1><a href="2018/09/06/git_pull_request_to_a_private_repo_from_a_public_repo.html">Git pull request to a private repo from a public repo</a></h1>
-<p>Our tribal organization has a private repository on github.com and has a public fork that we share as an open source project with other tribes in the Pacific Northwest. Inevitably, there are features and bug fixes happening in both repositories that we want to share in both directions.</p>
-<p>However, according to github.com tech support, it isn’t possible to create a PR across that public/private boundary. When I try to compare across forks, sure enough, only the public repositories show up.</p>
-<p>![Github Compare](github-compare.png)</p>
+<p>Our tribal organization has a private repository on <a class="reference external" href="github.com">GitHub</a> and has <a class="reference external" href="https://github.com/CTUIR/cdms-fe-public">a public fork</a> that we share as an open source project with other tribes in the Pacific Northwest. Inevitably, there are features and bug fixes happening in both repositories that we want to share in both directions.</p>
+<p>However, according to github tech support, it isn’t possible to create a PR across that public/private boundary. When I try to compare across forks, sure enough, only the public repositories show up.</p>
+<img alt="../../../_images/github-compare.png" src="_images/github-compare.png"/>
 <p>I realized this might still be accomplished by simply making a branch in the private repo based on my public master. Then I could do a PR in our private repo between the new branch and master.</p>
 <p>Here are the steps:</p>
 <ol class="arabic simple">
 <li>From your private repository: git checkout master</li>
-<li>Add your public remote: git remote add public_cdms_fe <a class="reference external" href="https://github.com/CTUIR/cdms-fe-public.git">https://github.com/CTUIR/cdms-fe-public.git</a></li>
-<li>Now fetch the remote branch into a new local branch: git fetch tribal_cdms_fe master:my_new_branch</li>
+<li>Add your public remote: <span class="docutils literal"><span class="pre">git</span> <span class="pre">remote</span> <span class="pre">add</span> <span class="pre">public_cdms_fe</span> <span class="pre">https://github.com/CTUIR/cdms-fe-public.git</span></span></li>
+<li>Now fetch the remote branch into a new local branch: <span class="docutils literal"><span class="pre">git</span> <span class="pre">fetch</span> <span class="pre">tribal_cdms_fe</span> <span class="pre">master:my_new_branch</span></span></li>
 </ol>
 <p>This will create a branch in your local private repo from the public repo master. Most likely, you’ll usually want to cherry-pick your changes rather making a PR that includes them all. Now that you’ve fetched the commits from the public master, you can create yet another new branch based on your private master and then cherry-pick the commits you want and then create a PR from that new branch.</p>
 <p>For example:</p>
 <ol class="arabic simple">
-<li>From your private master branch create a new branch: git checkout -b tribal_cherrypicks</li>
-<li>git cherry-pick COMMITID (note: you can get the COMMITID from “git log”)</li>
+<li>From your private master branch create a new branch: <span class="docutils literal"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">-b</span> <span class="pre">tribal_cherrypicks</span></span></li>
+<li><span class="docutils literal"><span class="pre">git</span> <span class="pre">cherry-pick</span> <span class="pre">COMMITID</span></span> (note: you can get the COMMITID from “git log”)</li>
 <li>Once you have all the commits you want, do your commit and then push your new branch up to github and then create a PR.</li>
 </ol>
 
