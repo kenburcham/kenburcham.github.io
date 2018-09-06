@@ -5,8 +5,34 @@
         <link>https://kenburcham.github.io/blog/html/</link>
         <description>20 Years Web Engineering</description>
         <language>en-us</language>
-        <pubDate>Wed, 05 Sep 2018 00:00:00 -0700</pubDate>
+        <pubDate>Thu, 06 Sep 2018 00:00:00 -0700</pubDate>
         
+        <item>
+            <link>https://kenburcham.github.io/blog/html/2018/09/06/git_pull_request_to_a_private_repo_from_a_public_repo.html</link>
+            <guid>https://kenburcham.github.io/blog/html/2018/09/06/git_pull_request_to_a_private_repo_from_a_public_repo.html</guid>
+            <title><![CDATA[Git pull request to a private repo from a public repo]]></title>
+            <description><![CDATA[<h1>Git pull request to a private repo from a public repo</h1>
+<p>Our tribal organization has a private repository on github.com and has a public fork that we share as an open source project with other tribes in the Pacific Northwest. Inevitably, there are features and bug fixes happening in both repositories that we want to share in both directions.</p>
+<p>However, according to github.com tech support, it isn’t possible to create a PR across that public/private boundary. When I try to compare across forks, sure enough, only the public repositories show up.</p>
+<p>![Github Compare](github-compare.png)</p>
+<p>I realized this might still be accomplished by simply making a branch in the private repo based on my public master. Then I could do a PR in our private repo between the new branch and master.</p>
+<p>Here are the steps:</p>
+<ol class="arabic simple">
+<li>From your private repository: git checkout master</li>
+<li>Add your public remote: git remote add public_cdms_fe <a class="reference external" href="https://github.com/CTUIR/cdms-fe-public.git">https://github.com/CTUIR/cdms-fe-public.git</a></li>
+<li>Now fetch the remote branch into a new local branch: git fetch tribal_cdms_fe master:my_new_branch</li>
+</ol>
+<p>This will create a branch in your local private repo from the public repo master. Most likely, you’ll usually want to cherry-pick your changes rather making a PR that includes them all. Now that you’ve fetched the commits from the public master, you can create yet another new branch based on your private master and then cherry-pick the commits you want and then create a PR from that new branch.</p>
+<p>For example:</p>
+<ol class="arabic simple">
+<li>From your private master branch create a new branch: git checkout -b tribal_cherrypicks</li>
+<li>git cherry-pick COMMITID (note: you can get the COMMITID from “git log”)</li>
+<li>Once you have all the commits you want, do your commit and then push your new branch up to github and then create a PR.</li>
+</ol>
+]]></description>
+             <pubDate>Thu, 06 Sep 2018 00:00:00 -0700</pubDate>
+        </item>
+    
         <item>
             <link>https://kenburcham.github.io/blog/html/2018/09/05/hello_tinkerer.html</link>
             <guid>https://kenburcham.github.io/blog/html/2018/09/05/hello_tinkerer.html</guid>

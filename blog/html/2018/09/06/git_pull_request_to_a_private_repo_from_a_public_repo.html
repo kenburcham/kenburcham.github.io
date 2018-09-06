@@ -15,29 +15,29 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
-        <title>Home &mdash; Ken Burcham</title>
-            <link rel="stylesheet" href="_static/normalize.css" type="text/css">
-            <link rel="stylesheet" href="_static/sphinx.css" type="text/css">
-            <link rel="stylesheet" href="_static/main.css" type="text/css">
-            <link rel="stylesheet" href="_static/flat.css" type="text/css">
-            <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-            <link rel="stylesheet" href="_static/font-awesome.min.css" type="text/css">
-        <link rel="shortcut icon" href="_static/tinkerer.ico" /><!-- Load modernizr and JQuery -->
-        <script src="_static/vendor/modernizr-2.6.2.min.js"></script>
+        <title>Git pull request to a private repo from a public repo &mdash; Ken Burcham</title>
+            <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/flat.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../../../_static/font-awesome.min.css" type="text/css">
+        <link rel="shortcut icon" href="../../../_static/tinkerer.ico" /><!-- Load modernizr and JQuery -->
+        <script src="../../../_static/vendor/modernizr-2.6.2.min.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
-        <script src="_static/plugins.js"></script>
-        <script src="_static/main.js"></script>
-        <link rel="search" title="Search" href="search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="rss.html" /><script type="text/javascript">
+        <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="../../../_static/plugins.js"></script>
+        <script src="../../../_static/main.js"></script>
+        <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Hello Tinkerer" href="../05/hello_tinkerer.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
+        URL_ROOT:    '../../../',
         VERSION:     '1.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="_static/underscore.js"></script><script type="text/javascript" src="_static/doctools.js"></script>
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -55,18 +55,18 @@
 
       <div id="container"><header role="banner">
             <hgroup>
-              <h1><a href="#">Ken Burcham</a></h1><h2>20 Years Web Engineering</h2></hgroup>
+              <h1><a href="../../../index.html">Ken Burcham</a></h1><h2>20 Years Web Engineering</h2></hgroup>
           </header>
       <nav role="navigation">
             <ul><li class="main-nav">
-                  <a href="#">Home</a>
+                  <a href="../../../index.html">Home</a>
                 </li>
               </ul>
           </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="timestamp postmeta">
             <span>September 06, 2018</span>
         </div>
-        <div class="section">
-            <h1><a href="2018/09/06/git_pull_request_to_a_private_repo_from_a_public_repo.html">Git pull request to a private repo from a public repo</a></h1>
+    <div class="section" id="git-pull-request-to-a-private-repo-from-a-public-repo">
+<h1>Git pull request to a private repo from a public repo</h1>
 <p>Our tribal organization has a private repository on github.com and has a public fork that we share as an open source project with other tribes in the Pacific Northwest. Inevitably, there are features and bug fixes happening in both repositories that we want to share in both directions.</p>
 <p>However, according to github.com tech support, it isn’t possible to create a PR across that public/private boundary. When I try to compare across forks, sure enough, only the public repositories show up.</p>
 <p>![Github Compare](github-compare.png)</p>
@@ -84,48 +84,28 @@
 <li>git cherry-pick COMMITID (note: you can get the COMMITID from “git log”)</li>
 <li>Once you have all the commits you want, do your commit and then push your new branch up to github and then create a PR.</li>
 </ol>
+</div>
 
-        </div>
-        <div class="postmeta">
+    <div class="postmeta">
         <div class="author">
             <span>Posted by Ken Burcham</span>
         </div>
         
         
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>September 05, 2018</span>
-        </div>
-        <div class="section">
-            <h1><a href="2018/09/05/hello_tinkerer.html">Hello Tinkerer</a></h1>
-<p>I’m inspired to start blogging again, if for no other reason that to have a place to post ongoing work and ideas. Generally, I’m a bit too utilitarian to take the time to write. Or maybe too driven or results-oriented or overwhelmed by saying “YES!” to too many things. But I’ve gotten so much out of the blogs of so many others, I thought it is about time to slow down a bit and write. Write about solutions, problems, interesting ideas; anything is fair game here.</p>
-<p>There are a few existing posts scattered around in other places that might be useful:</p>
-<ul class="simple">
-<li><a class="reference external" href="https://medium.com/@kenburcham/how-to-add-ai-to-your-wordpress-site-5470e1c833d5/">How to Add AI to your WordPress Website</a> - An article promoting my WordPress plugin I created for Algorithmia.</li>
-<li><a class="reference external" href="https://medium.com/@kenburcham/how-to-setup-a-remote-water-temperature-datalogger-to-send-data-via-the-noaa-goes-satellite-7f846aa393be">How to Setup a Remote Water Temperature Datalogger to Send Data via the NOAA GOES Satellite</a> - Explanation of the long, complex process of getting our remote datalogger working.</li>
-</ul>
-<p>Why <a class="reference external" href="http://tinkerer.me">Tinkerer</a>? It is simple, attractive enough in its default form, open source, Python, generates static pages, and uses reStructuredText which I’ve wanted to try out for awhile.</p>
-<p>I’ll keep working on this. (promises, promises. :)</p>
-
-        </div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by Ken Burcham</span>
-        </div>
-        
-        
-        </div><div class="archive_link">
-        <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
-    </div></article><aside class="sidebar"><section><div class="widget">
+        </div><ul class="related clearfix">
+            <li class="left"></li>
+            <li class="right"><a href="../05/hello_tinkerer.html">Hello Tinkerer</a> &raquo; </li>
+        </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
-            <a href="2018/09/06/git_pull_request_to_a_private_repo_from_a_public_repo.html">Git pull request to a private repo from a public repo</a>
+            <a href="#">Git pull request to a private repo from a public repo</a>
         </li><li>
-            <a href="2018/09/05/hello_tinkerer.html">Hello Tinkerer</a>
+            <a href="../05/hello_tinkerer.html">Hello Tinkerer</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
-    <form action="search.html" method="get">
+    <form action="../../../search.html" method="get">
         <input type="text" name="q" />
         <button type="submit"><span class="fa fa-search"></span></button>
     </form>
