@@ -11,9 +11,12 @@ I realized this might still be accomplished by simply making a branch in the pri
 
 Here are the steps:
 
-1. From your private repository: git checkout master
-2. Add your public remote: ``git remote add public_cdms_fe https://github.com/CTUIR/cdms-fe-public.git``
-3. Now fetch the remote branch into a new local branch: ``git fetch tribal_cdms_fe master:my_new_branch``
+1. From your private repository: 
+    ``git checkout master``
+2. Add your public remote: 
+    ``git remote add public_cdms_fe https://github.com/CTUIR/cdms-fe-public.git``
+3. Now fetch the remote branch into a new local branch: 
+    ``git fetch tribal_cdms_fe master:my_new_branch``
 
 This will create a branch in your local private repo from the public repo master. Most likely, you'll usually want to cherry-pick your changes rather making a PR that includes them all. Now that you've fetched the commits from the public master, you can create yet another new branch based on your private master and then cherry-pick the commits you want and then create a PR from that new branch. 
 

@@ -18,9 +18,21 @@
 <p>I realized this might still be accomplished by simply making a branch in the private repo based on my public master. Then I could do a PR in our private repo between the new branch and master.</p>
 <p>Here are the steps:</p>
 <ol class="arabic simple">
-<li>From your private repository: git checkout master</li>
-<li>Add your public remote: <span class="docutils literal"><span class="pre">git</span> <span class="pre">remote</span> <span class="pre">add</span> <span class="pre">public_cdms_fe</span> <span class="pre">https://github.com/CTUIR/cdms-fe-public.git</span></span></li>
-<li>Now fetch the remote branch into a new local branch: <span class="docutils literal"><span class="pre">git</span> <span class="pre">fetch</span> <span class="pre">tribal_cdms_fe</span> <span class="pre">master:my_new_branch</span></span></li>
+<li><dl class="first docutils">
+<dt>From your private repository:</dt>
+<dd><span class="docutils literal"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">master</span></span></dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Add your public remote:</dt>
+<dd><span class="docutils literal"><span class="pre">git</span> <span class="pre">remote</span> <span class="pre">add</span> <span class="pre">public_cdms_fe</span> <span class="pre">https://github.com/CTUIR/cdms-fe-public.git</span></span></dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Now fetch the remote branch into a new local branch:</dt>
+<dd><span class="docutils literal"><span class="pre">git</span> <span class="pre">fetch</span> <span class="pre">tribal_cdms_fe</span> <span class="pre">master:my_new_branch</span></span></dd>
+</dl>
+</li>
 </ol>
 <p>This will create a branch in your local private repo from the public repo master. Most likely, you’ll usually want to cherry-pick your changes rather making a PR that includes them all. Now that you’ve fetched the commits from the public master, you can create yet another new branch based on your private master and then cherry-pick the commits you want and then create a PR from that new branch.</p>
 <p>For example:</p>
