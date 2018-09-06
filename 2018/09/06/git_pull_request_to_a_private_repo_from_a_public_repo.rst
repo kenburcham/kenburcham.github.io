@@ -14,7 +14,7 @@ Here are the steps:
 1. From your private repository: 
     ``git checkout master``
 2. Add your public remote: 
-    ``git remote add public_cdms_fe https://github.com/CTUIR/cdms-fe-public.git``
+    ``git remote add tribal_cdms_fe https://github.com/CTUIR/cdms-fe-public.git``
 3. Now fetch the remote branch into a new local branch: 
     ``git fetch tribal_cdms_fe master:my_new_branch``
 
