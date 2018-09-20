@@ -5,8 +5,200 @@
         <link>https://kenburcham.github.io/blog/html/</link>
         <description>20 Years of Web Engineering</description>
         <language>en-us</language>
-        <pubDate>Thu, 06 Sep 2018 00:00:00 -0700</pubDate>
+        <pubDate>Thu, 20 Sep 2018 00:00:00 -0700</pubDate>
         
+        <item>
+            <link>https://kenburcham.github.io/blog/html/2018/09/20/tinkering_with_code_blocks.html</link>
+            <guid>https://kenburcham.github.io/blog/html/2018/09/20/tinkering_with_code_blocks.html</guid>
+            <title><![CDATA[Tinkering with Code Blocks]]></title>
+            <description><![CDATA[<h1>Tinkering with Code Blocks</h1>
+<p>After googling a bit for Tinkerer and reStructuredText documentation, it would seem that it should be easy to include some nice looking, syntax highlighted code blocks in your blog posts. Buuut it still doesn’t seem completely clear and I probably won’t immediately remember so let’s consider this a cheatsheet / sandbox for Tinkerer code block experiments.</p>
+<p>Of course, we might consider trying or editing our stylesheet, but I’m interested in what the default Tinkerer makes possible.</p>
+<p>Single backticks: I can italicise using backticks <cite>around some text</cite> and that’s that.</p>
+<p>Double backticks: I can use double backticks <span class="docutils literal"><span class="pre">and</span> <span class="pre">get</span> <span class="pre">a</span> <span class="pre">grey</span> <span class="pre">background</span></span> which is nice for inline key words.</p>
+<p>For a code snippet, just add a double colon to the end of a paragraph, give a new line and then indent the next paraphgraph and you get this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/><span class="n">And</span> <span class="n">then</span> <span class="n">it</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">literal</span> <span class="n">block</span> <span class="k">with</span> <span class="n">python</span> <span class="n">syntax</span> <span class="n">highlighting</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>Note: if you don’t indent the paragraph that follows the double colon it leaves it all literal::
+and mashes the line right in with the double colon.</p>
+<p>Now, this paragraph ends with a double colon with some python code:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/><span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">'Username'</span> <span class="p">:</span> <span class="s1">'kenb'</span><span class="p">,</span>
+        <span class="s1">'Password'</span> <span class="p">:</span> <span class="s2">"password"</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>And then just un-indent and carry on with your text copy to break back out. That’s nice, in that you don’t have to wrap or anything!</p>
+<p>That was fun, so here is more code:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/><span class="n">login_url</span> <span class="o">=</span> <span class="s2">"http://10.10.10.63:8082/services/api/v1/account/login"</span>
+
+<span class="k">with</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">login_url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"http://10.10.10.63:8082/services/api/v1/account/whoami"</span><span class="p">)</span>
+
+        <span class="n">user</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">user</span><span class="p">[</span><span class="s2">"Fullname"</span><span class="p">])</span> <span class="c1">#prints "Ken Burcham"</span>
+</pre></div>
+</div>
+<p>And now for a final code snippet:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/><span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">iter_lines</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">on_line</span> <span class="o">&lt;</span> <span class="n">lines_to_skip</span><span class="p">:</span>
+                    <span class="n">on_line</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                    <span class="n">on_line</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">words</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"UTF-8"</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+                    <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">):</span>
+                            <span class="k">continue</span>
+
+                    <span class="k">try</span><span class="p">:</span>
+                            <span class="n">measure_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s2">" "</span><span class="o">+</span><span class="n">words</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M"</span><span class="p">)</span>
+                    <span class="k">except</span><span class="p">:</span>
+                            <span class="k">continue</span>
+
+                    <span class="c1">#verify the measure is a valid number (float)</span>
+                    <span class="k">if</span><span class="p">(</span><span class="n">yesterday</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'%m</span><span class="si">%d</span><span class="s1">%y'</span><span class="p">)</span> <span class="o">==</span> <span class="n">measure_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'%m</span><span class="si">%d</span><span class="s1">%y'</span><span class="p">)</span> <span class="ow">and</span> <span class="n">isfloat</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="mi">2</span><span class="p">])):</span>
+                            <span class="n">payload</span><span class="p">[</span><span class="s2">"Details"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                                    <span class="s1">'ReadingDateTime'</span> <span class="p">:</span> <span class="n">measure_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M"</span><span class="p">),</span>
+                                    <span class="n">file</span><span class="p">[</span><span class="s2">"MeasureColumn"</span><span class="p">]</span> <span class="p">:</span> <span class="n">words</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                            <span class="p">});</span>
+</pre></div>
+</div>
+]]></description>
+             <pubDate>Thu, 20 Sep 2018 00:00:00 -0700</pubDate>
+        </item>
+    
+        <item>
+            <link>https://kenburcham.github.io/blog/html/2018/09/19/etl_python_web_style.html</link>
+            <guid>https://kenburcham.github.io/blog/html/2018/09/19/etl_python_web_style.html</guid>
+            <title><![CDATA[ETL, Python + REST Style]]></title>
+            <description><![CDATA[<div class="section" id="etl-python-rest-style">
+<h1>ETL, Python + REST Style</h1>
+<p>One of the main projects I work on we call “CDMS” for Centralized Database Management System. Very creative name, but somehow it stuck. CDMS (<a class="reference external" href="https://github.com/ctuir/cdms">github</a>) is a web application we use to store all of the natural resource data (as well as other data) for the CTUIR organization.</p>
+<p>Last week I was given the task to create a map that would show the 3-day maximum water temperature at a variety of locations as well as the 3-day average discharge (water flow in cfs) at a set of locations tracked by the <a class="reference external" href="https://www.wwbwc.org/">Walla Walla Basin Watershed Council</a>.</p>
+<p>The WWBWC were very accommodating to provide us with links to 7-day data exports from their system and so we want to pull that data in, parse it and then push it into the CDMS.</p>
+<p>The first task was to login to our own system with a session cookie so that we would be able to POST the data to our API data import endpoint:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/><span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">login_url</span> <span class="o">=</span> <span class="s2">"http://cdms-test:8082/services/api/v1/account/login"</span>
+<span class="n">login_payload</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">'Username'</span> <span class="p">:</span> <span class="s1">'ken'</span><span class="p">,</span>
+        <span class="s1">'Password'</span> <span class="p">:</span> <span class="s1">'secret'</span>
+<span class="p">}</span>
+
+<span class="k">with</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">login_url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">login_payload</span><span class="p">)</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"http://cdms-test:8082/services/api/v1/account/whoami"</span><span class="p">)</span>
+
+    <span class="c1">#do a little test</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"logged in as "</span> <span class="o">+</span> <span class="n">user</span><span class="p">[</span><span class="s2">"Fullname"</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>The <span class="docutils literal"><span class="pre">requests</span></span> module is quite slick with a delightfully terse syntax.</p>
+<p>From there, I can fetch and parse the datafile from the WWBWC to prepare for loading into CDMS. Since I have a few sites to process data for, I’ll configure them in an list:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/><span class="n">files_to_load</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span>
+                <span class="s2">"LocationId"</span><span class="p">:</span> <span class="s2">"15925"</span><span class="p">,</span>
+                <span class="s2">"InstrumentId"</span><span class="p">:</span> <span class="s2">"265"</span><span class="p">,</span>
+                <span class="s2">"URL"</span> <span class="p">:</span> <span class="s2">"http://wwbwc.org/images/StreamFlowSites/S108_7_Day_Discharge.txt"</span><span class="p">,</span>
+                <span class="s2">"MeasureColumn"</span><span class="p">:</span> <span class="s1">'WaterFlow'</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+                <span class="s2">"LocationId"</span><span class="p">:</span> <span class="s2">"15926"</span><span class="p">,</span>
+                <span class="s2">"InstrumentId"</span><span class="p">:</span> <span class="s2">"266"</span><span class="p">,</span>
+                <span class="s2">"URL"</span> <span class="p">:</span> <span class="s2">"http://wwbwc.org/images/StreamFlowSites/S105_7_Day_Discharge.txt"</span><span class="p">,</span>
+                <span class="s2">"MeasureColumn"</span><span class="p">:</span> <span class="s2">"WaterFlow"</span>
+        <span class="p">},</span>
+    <span class="o">...</span>
+    <span class="p">{</span>
+                <span class="s2">"LocationId"</span><span class="p">:</span> <span class="s2">"15925"</span><span class="p">,</span>
+                <span class="s2">"InstrumentId"</span><span class="p">:</span> <span class="s2">"278"</span><span class="p">,</span>
+                <span class="s2">"URL"</span> <span class="p">:</span> <span class="s2">"http://wwbwc.org/images/StreamFlowSites/S108_7_Day_WaterTemp.txt"</span><span class="p">,</span>
+                <span class="s2">"MeasureColumn"</span><span class="p">:</span> <span class="s1">'WaterTemperature'</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+                <span class="s2">"LocationId"</span><span class="p">:</span> <span class="s2">"15926"</span><span class="p">,</span>
+                <span class="s2">"InstrumentId"</span><span class="p">:</span> <span class="s2">"279"</span><span class="p">,</span>
+                <span class="s2">"URL"</span> <span class="p">:</span> <span class="s2">"http://wwbwc.org/images/StreamFlowSites/S105_7_Day_WaterTemp.txt"</span><span class="p">,</span>
+                <span class="s2">"MeasureColumn"</span><span class="p">:</span> <span class="s2">"WaterTemperature"</span>
+        <span class="p">},</span>
+    <span class="o">...</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>In our system, I’ve defined the locations and the instruments that this data is going to be represented from and put in the ID’s. Since for some files the measurement is water temperature and others the measurement is flow, I also have an parameter for which field is the target field in our system.</p>
+<p>Then we can iterate the list of files to load, build up our payload, then make a POST to our own endpoint to save the data:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span/><span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files_to_load</span><span class="p">:</span>
+
+            <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">'LocationId'</span> <span class="p">:</span> <span class="n">file</span><span class="p">[</span><span class="s1">'LocationId'</span><span class="p">],</span>
+                    <span class="s1">'InstrumentId'</span> <span class="p">:</span> <span class="n">file</span><span class="p">[</span><span class="s1">'InstrumentId'</span><span class="p">],</span>
+                    <span class="s1">'Header'</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s2">"FieldActivityType"</span><span class="p">:</span> <span class="s2">"Data File Upload"</span><span class="p">,</span>
+                            <span class="s2">"CollectionType"</span> <span class="p">:</span> <span class="s2">"Surface water"</span><span class="p">,</span>
+                            <span class="s2">"SamplePeriod"</span> <span class="p">:</span> <span class="s2">"15min"</span><span class="p">,</span>
+                    <span class="p">},</span>
+                    <span class="s1">'Details'</span><span class="p">:</span> <span class="p">[]</span>
+            <span class="p">}</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"-------------------------------"</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"fetching "</span> <span class="o">+</span> <span class="n">file</span><span class="p">[</span><span class="s2">"URL"</span><span class="p">])</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">file</span><span class="p">[</span><span class="s2">"URL"</span><span class="p">])</span>
+
+            <span class="n">on_line</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">iter_lines</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">on_line</span> <span class="o">&lt;</span> <span class="n">lines_to_skip</span><span class="p">:</span>
+                            <span class="n">on_line</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">else</span><span class="p">:</span>
+                            <span class="n">on_line</span> <span class="o">+=</span> <span class="mi">1</span>
+                            <span class="n">words</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"UTF-8"</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+                            <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">):</span>
+                                    <span class="k">continue</span>
+
+                            <span class="k">try</span><span class="p">:</span>
+                                    <span class="n">measure_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s2">" "</span><span class="o">+</span><span class="n">words</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M"</span><span class="p">)</span>
+                            <span class="k">except</span><span class="p">:</span>
+                                    <span class="k">continue</span>
+
+                            <span class="c1">#verify the measure is a valid number (float)</span>
+                            <span class="k">if</span><span class="p">(</span><span class="n">yesterday</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'%m</span><span class="si">%d</span><span class="s1">%y'</span><span class="p">)</span> <span class="o">==</span> <span class="n">measure_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'%m</span><span class="si">%d</span><span class="s1">%y'</span><span class="p">)</span> <span class="ow">and</span> <span class="n">isfloat</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="mi">2</span><span class="p">])):</span>
+                                    <span class="n">payload</span><span class="p">[</span><span class="s2">"Details"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                                            <span class="s1">'ReadingDateTime'</span> <span class="p">:</span> <span class="n">measure_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M"</span><span class="p">),</span>
+                                            <span class="n">file</span><span class="p">[</span><span class="s2">"MeasureColumn"</span><span class="p">]</span> <span class="p">:</span> <span class="n">words</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                                    <span class="p">});</span>
+
+
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"Total lines of data in file: "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">on_line</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"Total details from yesterday to push: "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">payload</span><span class="p">[</span><span class="s2">"Details"</span><span class="p">])))</span>
+
+            <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">payload</span><span class="p">[</span><span class="s2">"Details"</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">"pushing to "</span> <span class="o">+</span> <span class="n">service_url</span><span class="p">)</span>
+                    <span class="n">payload_wrapper</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"DatasetId"</span><span class="p">:</span> <span class="n">dataset_id</span><span class="p">,</span> <span class="s2">"UserId"</span><span class="p">:</span> <span class="n">user</span><span class="p">[</span><span class="s2">"Id"</span><span class="p">],</span> <span class="s2">"activities"</span> <span class="p">:</span> <span class="p">{</span><span class="s2">"1"</span><span class="p">:</span> <span class="n">payload</span><span class="p">}}</span>
+                    <span class="n">p</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">service_url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">payload_wrapper</span><span class="p">)</span>
+
+                    <span class="nb">print</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span> <span class="p">(</span><span class="s2">"nothing to do."</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Since our endpoint requires the login, this must all be under the <span class="docutils literal"><span class="pre">with</span> <span class="pre">requests.Session()</span> <span class="pre">as</span> <span class="pre">s:</span></span> block.</p>
+</div>
+<div class="section" id="conclusion">
+<h1>Conclusion</h1>
+<p>Running the script logs into our API service, fetches and parses each file, builds up a JSON payload object from the data records that match yesterday’s date… then it posts the payload to our server.</p>
+</div>
+]]></description>
+             <pubDate>Wed, 19 Sep 2018 00:00:00 -0700</pubDate>
+        </item>
+    
         <item>
             <link>https://kenburcham.github.io/blog/html/2018/09/06/git_pull_request_to_a_private_repo_from_a_public_repo.html</link>
             <guid>https://kenburcham.github.io/blog/html/2018/09/06/git_pull_request_to_a_private_repo_from_a_public_repo.html</guid>

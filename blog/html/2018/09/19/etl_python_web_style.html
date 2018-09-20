@@ -1,0 +1,224 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        <title>ETL, Python + REST Style &mdash; Ken Burcham</title>
+            <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/flat.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../../../_static/font-awesome.min.css" type="text/css">
+        <link rel="shortcut icon" href="../../../_static/tinkerer.ico" /><!-- Load modernizr and JQuery -->
+        <script src="../../../_static/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="../../../_static/plugins.js"></script>
+        <script src="../../../_static/main.js"></script>
+        <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Git pull request to a private repo from a public repo" href="../06/git_pull_request_to_a_private_repo_from_a_public_repo.html" /><link rel="prev" title="Tinkering with Code Blocks" href="../20/tinkering_with_code_blocks.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.7.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(document.getElementsByTagName("article")[0].offsetTop - 44);
+            }
+        });
+    </script></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><header role="banner">
+            <hgroup>
+              <h1><a href="../../../index.html">Ken Burcham</a></h1><h2>20 Years of Web Engineering</h2></hgroup>
+          </header>
+      <nav role="navigation">
+            <ul><li class="main-nav">
+                  <a href="../../../index.html">Home</a>
+                </li>
+              </ul>
+          </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="timestamp postmeta">
+            <span>September 19, 2018</span>
+        </div>
+    <div class="section" id="etl-python-rest-style">
+<h1>ETL, Python + REST Style</h1>
+<p>One of the main projects I work on we call “CDMS” for Centralized Database Management System. Very creative name, but somehow it stuck. CDMS (<a class="reference external" href="https://github.com/ctuir/cdms">github</a>) is a web application we use to store all of the natural resource data (as well as other data) for the CTUIR organization.</p>
+<p>Last week I was given the task to create a map that would show the 3-day maximum water temperature at a variety of locations as well as the 3-day average discharge (water flow in cfs) at a set of locations tracked by the <a class="reference external" href="https://www.wwbwc.org/">Walla Walla Basin Watershed Council</a>.</p>
+<p>The WWBWC were very accommodating to provide us with links to 7-day data exports from their system and so we want to pull that data in, parse it and then push it into the CDMS.</p>
+<p>The first task was to login to our own system with a session cookie so that we would be able to POST the data to our API data import endpoint:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">login_url</span> <span class="o">=</span> <span class="s2">&quot;http://cdms-test:8082/services/api/v1/account/login&quot;</span>
+<span class="n">login_payload</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;Username&#39;</span> <span class="p">:</span> <span class="s1">&#39;ken&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Password&#39;</span> <span class="p">:</span> <span class="s1">&#39;secret&#39;</span>
+<span class="p">}</span>
+
+<span class="k">with</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">login_url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">login_payload</span><span class="p">)</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;http://cdms-test:8082/services/api/v1/account/whoami&quot;</span><span class="p">)</span>
+
+    <span class="c1">#do a little test</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;logged in as &quot;</span> <span class="o">+</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;Fullname&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>The <span class="docutils literal"><span class="pre">requests</span></span> module is quite slick with a delightfully terse syntax.</p>
+<p>From there, I can fetch and parse the datafile from the WWBWC to prepare for loading into CDMS. Since I have a few sites to process data for, I’ll configure them in an list:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">files_to_load</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span>
+                <span class="s2">&quot;LocationId&quot;</span><span class="p">:</span> <span class="s2">&quot;15925&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;InstrumentId&quot;</span><span class="p">:</span> <span class="s2">&quot;265&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;URL&quot;</span> <span class="p">:</span> <span class="s2">&quot;http://wwbwc.org/images/StreamFlowSites/S108_7_Day_Discharge.txt&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;MeasureColumn&quot;</span><span class="p">:</span> <span class="s1">&#39;WaterFlow&#39;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+                <span class="s2">&quot;LocationId&quot;</span><span class="p">:</span> <span class="s2">&quot;15926&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;InstrumentId&quot;</span><span class="p">:</span> <span class="s2">&quot;266&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;URL&quot;</span> <span class="p">:</span> <span class="s2">&quot;http://wwbwc.org/images/StreamFlowSites/S105_7_Day_Discharge.txt&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;MeasureColumn&quot;</span><span class="p">:</span> <span class="s2">&quot;WaterFlow&quot;</span>
+        <span class="p">},</span>
+    <span class="o">...</span>
+    <span class="p">{</span>
+                <span class="s2">&quot;LocationId&quot;</span><span class="p">:</span> <span class="s2">&quot;15925&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;InstrumentId&quot;</span><span class="p">:</span> <span class="s2">&quot;278&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;URL&quot;</span> <span class="p">:</span> <span class="s2">&quot;http://wwbwc.org/images/StreamFlowSites/S108_7_Day_WaterTemp.txt&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;MeasureColumn&quot;</span><span class="p">:</span> <span class="s1">&#39;WaterTemperature&#39;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+                <span class="s2">&quot;LocationId&quot;</span><span class="p">:</span> <span class="s2">&quot;15926&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;InstrumentId&quot;</span><span class="p">:</span> <span class="s2">&quot;279&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;URL&quot;</span> <span class="p">:</span> <span class="s2">&quot;http://wwbwc.org/images/StreamFlowSites/S105_7_Day_WaterTemp.txt&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;MeasureColumn&quot;</span><span class="p">:</span> <span class="s2">&quot;WaterTemperature&quot;</span>
+        <span class="p">},</span>
+    <span class="o">...</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>In our system, I’ve defined the locations and the instruments that this data is going to be represented from and put in the ID’s. Since for some files the measurement is water temperature and others the measurement is flow, I also have an parameter for which field is the target field in our system.</p>
+<p>Then we can iterate the list of files to load, build up our payload, then make a POST to our own endpoint to save the data:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files_to_load</span><span class="p">:</span>
+
+            <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;LocationId&#39;</span> <span class="p">:</span> <span class="n">file</span><span class="p">[</span><span class="s1">&#39;LocationId&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;InstrumentId&#39;</span> <span class="p">:</span> <span class="n">file</span><span class="p">[</span><span class="s1">&#39;InstrumentId&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;Header&#39;</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s2">&quot;FieldActivityType&quot;</span><span class="p">:</span> <span class="s2">&quot;Data File Upload&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;CollectionType&quot;</span> <span class="p">:</span> <span class="s2">&quot;Surface water&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;SamplePeriod&quot;</span> <span class="p">:</span> <span class="s2">&quot;15min&quot;</span><span class="p">,</span>
+                    <span class="p">},</span>
+                    <span class="s1">&#39;Details&#39;</span><span class="p">:</span> <span class="p">[]</span>
+            <span class="p">}</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-------------------------------&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;fetching &quot;</span> <span class="o">+</span> <span class="n">file</span><span class="p">[</span><span class="s2">&quot;URL&quot;</span><span class="p">])</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">file</span><span class="p">[</span><span class="s2">&quot;URL&quot;</span><span class="p">])</span>
+
+            <span class="n">on_line</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">iter_lines</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">on_line</span> <span class="o">&lt;</span> <span class="n">lines_to_skip</span><span class="p">:</span>
+                            <span class="n">on_line</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">else</span><span class="p">:</span>
+                            <span class="n">on_line</span> <span class="o">+=</span> <span class="mi">1</span>
+                            <span class="n">words</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;UTF-8&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+                            <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">):</span>
+                                    <span class="k">continue</span>
+
+                            <span class="k">try</span><span class="p">:</span>
+                                    <span class="n">measure_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="n">words</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M&quot;</span><span class="p">)</span>
+                            <span class="k">except</span><span class="p">:</span>
+                                    <span class="k">continue</span>
+
+                            <span class="c1">#verify the measure is a valid number (float)</span>
+                            <span class="k">if</span><span class="p">(</span><span class="n">yesterday</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%m</span><span class="si">%d</span><span class="s1">%y&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">measure_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%m</span><span class="si">%d</span><span class="s1">%y&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">isfloat</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="mi">2</span><span class="p">])):</span>
+                                    <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;Details&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                                            <span class="s1">&#39;ReadingDateTime&#39;</span> <span class="p">:</span> <span class="n">measure_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M&quot;</span><span class="p">),</span>
+                                            <span class="n">file</span><span class="p">[</span><span class="s2">&quot;MeasureColumn&quot;</span><span class="p">]</span> <span class="p">:</span> <span class="n">words</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                                    <span class="p">});</span>
+
+
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Total lines of data in file: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">on_line</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Total details from yesterday to push: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">payload</span><span class="p">[</span><span class="s2">&quot;Details&quot;</span><span class="p">])))</span>
+
+            <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">payload</span><span class="p">[</span><span class="s2">&quot;Details&quot;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;pushing to &quot;</span> <span class="o">+</span> <span class="n">service_url</span><span class="p">)</span>
+                    <span class="n">payload_wrapper</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;DatasetId&quot;</span><span class="p">:</span> <span class="n">dataset_id</span><span class="p">,</span> <span class="s2">&quot;UserId&quot;</span><span class="p">:</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;Id&quot;</span><span class="p">],</span> <span class="s2">&quot;activities&quot;</span> <span class="p">:</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="n">payload</span><span class="p">}}</span>
+                    <span class="n">p</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">service_url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">payload_wrapper</span><span class="p">)</span>
+
+                    <span class="nb">print</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;nothing to do.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Since our endpoint requires the login, this must all be under the <span class="docutils literal"><span class="pre">with</span> <span class="pre">requests.Session()</span> <span class="pre">as</span> <span class="pre">s:</span></span> block.</p>
+</div>
+<div class="section" id="conclusion">
+<h1>Conclusion</h1>
+<p>Running the script logs into our API service, fetches and parses each file, builds up a JSON payload object from the data records that match yesterday’s date… then it posts the payload to our server.</p>
+</div>
+
+    <div class="postmeta">
+        <div class="author">
+            <span>Posted by Ken Burcham</span>
+        </div>
+        
+        
+        </div><ul class="related clearfix">
+            <li class="left"> &laquo; <a href="../20/tinkering_with_code_blocks.html">Tinkering with Code Blocks</a></li>
+            <li class="right"><a href="../06/git_pull_request_to_a_private_repo_from_a_public_repo.html">Git pull request to a private repo from a public repo</a> &raquo; </li>
+        </ul></article><aside class="sidebar"><section><div class="widget">
+    <h1>Recent Posts</h1>
+    <ul><li>
+            <a href="../20/tinkering_with_code_blocks.html">Tinkering with Code Blocks</a>
+        </li><li>
+            <a href="#">ETL, Python + REST Style</a>
+        </li><li>
+            <a href="../06/git_pull_request_to_a_private_repo_from_a_public_repo.html">Git pull request to a private repo from a public repo</a>
+        </li><li>
+            <a href="../05/hello_tinkerer.html">Hello Tinkerer</a>
+        </li></ul>
+</div>
+</section><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <button type="submit"><span class="fa fa-search"></span></button>
+    </form>
+</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2018, Ken Burcham. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>
